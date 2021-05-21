@@ -1,9 +1,5 @@
-try:
-    from smbus2 import SMBus
-except ImportError:
-    from smbus import SMBus
-from bme280 import BME280
-from bmp280 import BMP280
+import smbus2
+import bme280
 
 import time
 
@@ -20,20 +16,20 @@ class grownosensor:
 
 class growbme280:
     def __init__(self):
-        self.bus = SMBus(1)
-        self.sensor = BME280(i2c_dev=self.bus)
+        port = 1
+        self.address = 0x77
+        self.bus = smbus2.SMBus(port)
+        self.calibration_params = bme280.load_calibration_params(self.bus, self.address)
+        # the sample method will take a single reading and return a
+        # compensated_reading object
+        
 
     def get_readings(self):
-        # Ignore first result since it seems stale
-        temperature = self.sensor.get_temperature()
-        pressure = self.sensor.get_pressure()
-        humidity = self.sensor.get_humidity()
-        time.sleep(0.1)
-
-        temperature = self.sensor.get_temperature()
-        pressure = self.sensor.get_pressure()
-        humidity = self.sensor.get_humidity()
-        time_str = time.strftime("%H:%M:%S")
+        data = bme280.sample(self.bus, self.address, self.calibration_params)
+        temperature = data.temperature
+        pressure = data.pressure
+        humidity = data.humidity
+        time_str = data.timestamp
 
         return {
             "time": time_str,

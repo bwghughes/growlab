@@ -33,6 +33,7 @@ if __name__ == "__main__":
 
     cam = camera(config["images"])
     frame = cam.get_frame()
+    print(frame)
 
     pwd = os.getcwd()
     output_path = pwd + "/html"
