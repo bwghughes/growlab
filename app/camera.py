@@ -31,7 +31,7 @@ class camera:
         
     def get_frame(self):
         """ fswebcam -r 1280x720 image2.jpg """
-        call(["fswebcam", "-r", "1280x720", "--set", "brightness=20%", "images/image.jpg"])
+        call(["fswebcam", "-r", "1280x720", "--set", "brightness=70%", "images/image.jpg"])
         time.sleep(2)
         with open("images/image.jpg", 'rb') as fh:
             buf = io.BytesIO(fh.read())
